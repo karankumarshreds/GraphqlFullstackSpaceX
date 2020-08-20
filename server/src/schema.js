@@ -38,13 +38,20 @@ const typeDefs = gql`
         email: String!
         trips: [Launch!] 
     }
+    type TripUpdateResponse {
+        success: Boolean!
+        message: String
+        launches: [Launch]
+    }
     # Mutation type (for clients to mutate the data)
-    Mutation {
+    type Mutation {
         bookTrips(launchIds: [ID]!): TripUpdateResponse!
         cancelTrip(launchId: ID!): TripUpdateResponse!
         login(email: String): String # login token
     }
+    ## It's good practice for a mutation to return whatever objects 
+    ## it modifies so the requesting client can update its cache and 
+    ## UI without needing to make a followup query.
+`;
 
-`
 module.exports = typeDefs;
-
