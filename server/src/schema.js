@@ -7,12 +7,26 @@ const { gql } = require('apollo-server');
 
 const typeDefs = gql`
     # Query types (for clients to fetch the data)
-    type Query {
-        launches: [Launch]!
+    type Query {     
+        launches(
+            # The number of results to show. Must be >= 1. Default = 20
+            pageSize: Int, 
+            # If you add a cursor here, it will only return results _after_ this cursor
+            after: String
+        ): LaunchConnection!
         launch(id: ID!): Launch
         me: User 
     }
     # Object types 
+    type LaunchConnection {
+        # indicates current position in the data set 
+        cursor: String!
+        # indictes whether the data set contains any more items
+        # beyond those already included in the launcheds array 
+        hasMore: Boolean!
+        # a list of launches
+        launches: [Launch]!
+    }
     enum PatchSize {
         SMALL
         LARGE
